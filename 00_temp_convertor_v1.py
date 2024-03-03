@@ -193,7 +193,7 @@ class DisplayHelp:
         self.help_box = Toplevel()
 
         # disable help button
-        partner.to_help_button.config(state=DISABLED)
+        partner.to_history_button.config(state=DISABLED)
 
         # If users press cross at top, closes help and
         # 'releases' help button
@@ -236,7 +236,7 @@ class DisplayHelp:
     # closes help dialogue (used by button and x at top of dialogue)
     def close_help(self, partner):
         # put help button back to normal...
-        partner.to_help_button.config(state=NORMAL)
+        partner.to_history_button.config(state=NORMAL)
         self.help_box.destroy()
 
 
