@@ -62,6 +62,7 @@ class HistoryExport:
         # for when writing to file
         self.var_filename = StringVar()
         self.var_todays_date = StringVar()
+        self.var_calc_list = StringVar()
 
         # set filename variable
         self.var_filename = StringVar()
@@ -176,6 +177,15 @@ class HistoryExport:
         max_calcs = self.var_max_calcs.get()
         calc_string = ""
 
+        # generate string for writing to file
+        # (the oldest calculation first)
+        oldest_first = ""
+        for item in var_calculations:
+            oldest_first += item
+            oldest_first += "\n"
+
+        self.var_calc_list.set(oldest_first)
+
         # work out how many times we need to loop
         # to output either the last five calculations
         # or all the calculations
@@ -203,10 +213,10 @@ class HistoryExport:
         filename = self.filename_entry.get()
 
         filename_ok = ""
+        date_part = self.get_date()
 
         if filename == "":
             # get date and create default filename
-            date_part = self.get_date()
             filename = "{}_temperature_calculations".format(date_part)
 
         else:
@@ -221,6 +231,9 @@ class HistoryExport:
             self.filename_feedback_label.config(text=success,
                                                 fg="dark green")
             self.filename_entry.config(bg="#FFFFFF")
+
+            # Write content to file!
+            self.write_to_file()
 
         else:
             self.filename_feedback_label.config(text=filename_ok,
@@ -267,6 +280,32 @@ class HistoryExport:
                       "underscores only.".format(problem)
 
         return problem
+
+    # write history to text file
+    def write_to_file(self):
+        # retrieve date, filename and calculation history...
+        filename = self.var_filename.get()
+        generated_date = self.var_todays_date.get()
+
+        # set up strings to be written to file
+        heading = "**** Temperature Calculations ****\n"
+        generated = "Generated: {}\n".format(generated_date)
+        sub_heading = "Here is your calculation history " \
+                      "(oldest to newest)...\n"
+        all_calculations = self.var_calc_list.get()
+
+        to_output_list = [heading, generated,
+                          sub_heading, all_calculations]
+        # write to file
+        # write output to file
+        text_file = open(filename, "w+")
+
+        for item in to_output_list:
+            text_file.write(item)
+            text_file.write("\n")
+
+        # close file
+        text_file.close()
 
     # closes help dialogue (used by button and x at top of dialogue)
     def close_history(self, partner):
