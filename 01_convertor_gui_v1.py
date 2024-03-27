@@ -1,6 +1,7 @@
 from tkinter import *
 from functools import partial  # To prevent unwanted windows
 
+
 class VolumeConverter:
 
     def __init__(self):
@@ -13,7 +14,7 @@ class VolumeConverter:
                                     text="Volume Converter",
                                     font=("Arial", "16", "bold")
                                     )
-        self.volume_heading.grid(row=0, columnspan=3)
+        self.volume_heading.grid(row=0, column=0, columnspan=3)
 
         # Volume entry fields
         self.volume_entry1 = Entry(self.volume_frame,
@@ -21,6 +22,24 @@ class VolumeConverter:
                                    width=10)
         self.volume_entry1.grid(row=1, column=0, padx=5, pady=5)
         self.volume_entry1.bind('<KeyRelease>', self.mirror_text)
+
+        self.to_liters_button1 = Button(self.volume_frame,
+                                        text="To Liters",
+                                        bg="#990099",
+                                        fg="#FFFFFF",
+                                        font=("Arial", "10", "bold"),
+                                        width=8,
+                                        command=partial(self.select_units, "liters", 1))
+        self.to_liters_button1.grid(row=2, column=0, padx=5, pady=5)
+
+        self.to_gallons_button1 = Button(self.volume_frame,
+                                         text="To Gallons",
+                                         bg="#009900",
+                                         fg="#FFFFFF",
+                                         font=("Arial", "10", "bold"),
+                                         width=8,
+                                         command=partial(self.select_units, "gallons", 1))
+        self.to_gallons_button1.grid(row=3, column=0, padx=5, pady=5)
 
         self.equals_label = Label(self.volume_frame,
                                   text="=")
@@ -32,25 +51,23 @@ class VolumeConverter:
         self.volume_entry2.grid(row=1, column=2, padx=5, pady=5)
         self.volume_entry2.bind('<KeyRelease>', self.mirror_text)
 
-        # Volume conversion buttons
-        self.button_frame = Frame(self.volume_frame)
-        self.button_frame.grid(row=2, columnspan=3)
+        self.to_liters_button2 = Button(self.volume_frame,
+                                        text="To Liters",
+                                        bg="#990099",
+                                        fg="#FFFFFF",
+                                        font=("Arial", "10", "bold"),
+                                        width=8,
+                                        command=partial(self.select_units, "liters", 2))
+        self.to_liters_button2.grid(row=2, column=2, padx=5, pady=5)
 
-        self.to_liters_button = Button(self.button_frame,
-                                       text="To Liters",
-                                       bg="#990099",
-                                       fg="#FFFFFF",
-                                       font=("Arial", "12", "bold"),
-                                       width=12)
-        self.to_liters_button.grid(row=0, column=0, padx=5, pady=5)
-
-        self.to_gallons_button = Button(self.button_frame,
+        self.to_gallons_button2 = Button(self.volume_frame,
                                          text="To Gallons",
                                          bg="#009900",
                                          fg="#FFFFFF",
-                                         font=("Arial", "12", "bold"),
-                                         width=12)
-        self.to_gallons_button.grid(row=0, column=1, padx=5, pady=5)
+                                         font=("Arial", "10", "bold"),
+                                         width=8,
+                                         command=partial(self.select_units, "gallons", 2))
+        self.to_gallons_button2.grid(row=3, column=2, padx=5, pady=5)
 
         # Help and history/export buttons
         self.help_button = Button(self.volume_frame,
@@ -60,7 +77,7 @@ class VolumeConverter:
                                   font=("Arial", "12", "bold"),
                                   width=12,
                                   command=self.to_help)
-        self.help_button.grid(row=3, column=0, padx=5, pady=5)
+        self.help_button.grid(row=4, column=0, padx=5, pady=5)
 
         self.history_button = Button(self.volume_frame,
                                      text="History / Export",
@@ -70,14 +87,20 @@ class VolumeConverter:
                                      width=12,
                                      state=DISABLED,
                                      command=self.to_history)
-        self.history_button.grid(row=3, column=2, padx=5, pady=5)
+        self.history_button.grid(row=4, column=2, padx=5, pady=5)
+
+        # Initialize selected units
+        self.select_units("", 1)
+        self.select_units("", 2)
 
     # Opens Help / Info dialogue box
-    def to_help(self):
+    @staticmethod
+    def to_help():
         DisplayHelp()
 
     # Opens History / Export dialogue box
-    def to_history(self):
+    @staticmethod
+    def to_history():
         HistoryExport()
 
     # Function to mirror text from one entry field to another
@@ -85,6 +108,24 @@ class VolumeConverter:
         text = self.volume_entry1.get()
         self.volume_entry2.delete(0, END)
         self.volume_entry2.insert(0, text)
+
+    # Function to select units for each field
+    def select_units(self, units, field):
+        if field == 1:
+            if units == "liters":
+                self.to_liters_button1.config(relief=SUNKEN)
+                self.to_gallons_button1.config(relief=RAISED)
+            elif units == "gallons":
+                self.to_liters_button1.config(relief=RAISED)
+                self.to_gallons_button1.config(relief=SUNKEN)
+        elif field == 2:
+            if units == "liters":
+                self.to_liters_button2.config(relief=SUNKEN)
+                self.to_gallons_button2.config(relief=RAISED)
+            elif units == "gallons":
+                self.to_liters_button2.config(relief=RAISED)
+                self.to_gallons_button2.config(relief=SUNKEN)
+
 
 class DisplayHelp:
 
@@ -126,6 +167,7 @@ class DisplayHelp:
     def close_help(self):
         self.help_box.destroy()
 
+
 class HistoryExport:
 
     def __init__(self):
@@ -162,9 +204,11 @@ class HistoryExport:
     def close_history(self):
         self.history_box.destroy()
 
+
 # main routine
 if __name__ == "__main__":
     root = Tk()
+    root.resizable(False, False)
     root.title("Volume Converter")
     VolumeConverter()
     root.mainloop()
