@@ -1,0 +1,6 @@
+Date                 Value      From Unit       Converted Value To Unit        
+2024-05-17 12:00:00  1.0        Liters          0.2642          Gallons        
+2024-05-17 12:05:00  2.0        Cubic Meters    70.6293         Cubic Feet     
+2024-05-17 12:10:00  3.5        Quarts          3.3069          Liters         
+2024-05-17 12:15:00  4.0        Gallons         15.1416         Liters         
+2024-05-17 12:20:00  5.0        Liters          1.32086         Gallons        
